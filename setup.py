@@ -1,14 +1,8 @@
 from setuptools import setup, find_packages
 import sys, os
 
-# Don't import gym module here, since deps may not be installed
-for package in find_packages():
-    if 'gym_' in package:
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), package))
-from package_info import USERNAME, VERSION
-
 setup(name='gym-seasun',
-    version=VERSION,
+    version='0.0.1',
     description='Gym Env for Seasun Games',
     url='https://github.com/ksieee/gym_seasun',
     author='Shane Li',
