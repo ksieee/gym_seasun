@@ -3,7 +3,7 @@ import sys, os
 
 # Don't import gym module here, since deps may not be installed
 for package in find_packages():
-    if '_gym_' in package:
+    if 'gym_' in package:
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), package))
 from package_info import USERNAME, VERSION
 
