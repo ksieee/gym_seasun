@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+message Action {
+
+  enum ActionType {
+    NONE = 0; //[] return observation
+    RESET = 1; //[env_id] return observation
+    MOVE = 2; //[direction_id] or [location_x, location_y]
+    SKILL_TO_TARGET = 3; //[skill_id, target_id]
+    SKILL_TO_LOCATION = 4; //[skill_id, location_x, location_y]
+    SKILL_FOLLOW_TARGET = 5; //[skill_id, target_id]
+    SKILL_FOLLOW_LOCATION = 6; //[skill_id, location_x, location_y]s
+  }
+
+  optional ActionType type = 1;
+  repeated float value = 2;
+}

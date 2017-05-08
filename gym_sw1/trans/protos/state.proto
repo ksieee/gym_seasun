@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+message State {
+
+    message Screen {
+        optional float min_screen_x = 1;
+        optional float max_screen_x = 2;
+        optional float min_screen_y = 3;
+        optional float max_screen_y = 4;
+    }
+
+    message Npc {
+        optional float x = 1;
+        optional float y = 2;
+        optional float move_speed = 3;
+        optional int32 face_to = 4;
+        optional float hp = 5;
+        optional float hp_m = 6;
+
+        // stage II
+        optional float mp = 7;
+        optional float mp_m = 8;
+        optional float ep = 9;
+        optional float ep_m = 10;
+        optional float hp_v = 11;
+        optional float mp_v = 12;
+        optional float ep_v = 13;
+        optional int32 relation = 14;
+        optional int32 type = 15;
+    }
+	
+	message Player {
+
+        message Skill {
+            optional float id = 1;
+            optional int32 type = 2; //location skill or target skill
+            optional float level = 3;
+            optional float range = 4;
+
+            // stage II
+            optional int32 target = 5; //friend or enemy
+            optional float cd_m = 6; //cd time max
+            optional float cd = 7; //current cd left time
+            optional float hp_cost = 8; //hp cost
+            optional float mp_cost = 9; //mp cost
+            optional float ep_cost = 10; //ep cost
+        }
+
+		optional State.Npc base = 1;
+		repeated State.Player.Skill skills = 2;
+	}
+
+    optional State.Player player = 1;
+    repeated State.Npc npc = 2;
+    optional State.Screen screen = 3;
+}
