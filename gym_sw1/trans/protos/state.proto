@@ -10,23 +10,25 @@ message State {
     }
 
     message Npc {
-        optional float x = 1;
-        optional float y = 2;
-        optional float move_speed = 3;
-        optional int32 face_to = 4;
-        optional float hp = 5;
-        optional float hp_m = 6;
+        optional float id = 1;
+        optional float temp_id = 2;
+        optional float x = 3;
+        optional float y = 4;
+        optional float move_speed = 5;
+        optional int32 face_to = 6;
+        optional float hp = 7;
+        optional float hp_m = 8;
 
         // stage II
-        optional float mp = 7;
-        optional float mp_m = 8;
-        optional float ep = 9;
-        optional float ep_m = 10;
-        optional float hp_v = 11;
-        optional float mp_v = 12;
-        optional float ep_v = 13;
-        optional int32 relation = 14;
-        optional int32 type = 15;
+        optional float mp = 9;
+        optional float mp_m = 10;
+        optional float ep = 11;
+        optional float ep_m = 12;
+        optional float hp_v = 13;
+        optional float mp_v = 14;
+        optional float ep_v = 15;
+        optional int32 relation = 16;
+        optional int32 type = 17;
     }
 	
 	message Player {
