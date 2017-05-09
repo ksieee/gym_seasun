@@ -26,8 +26,7 @@ class NormalAttackEnv(gym.Env):
         self.game_socket = None
 
         # me_x, me_y, me_hp, me_hp_max, me_face_to, me_speed,
-        # target_x, target_y, target_hp, target_hp_max, target_face_to, target_speed,
-        # min_screen_x, min_screen_y, max_screen_x, max_screen_y
+        # target_x, target_y, target_hp, target_hp_max, target_face_to, target_speed
         self.observation_space = gym.spaces.Box(float("-inf"), float("inf"), (STATE_DIM,))
 
         # {0,1,2,3,4,5,6,7,8} =
@@ -65,14 +64,6 @@ class NormalAttackEnv(gym.Env):
             result.append(state.npc[0].move_speed)
         else:
             result.extend([0, 0, 0, 0, 0, 0])
-
-        if state.screen:
-            result.append(state.screen.min_screen_x)
-            result.append(state.screen.min_screen_y)
-            result.append(state.screen.max_screen_x)
-            result.append(state.screen.max_screen_y)
-        else:
-            result.extend([0, 0, 0, 0])
 
         return result
 
