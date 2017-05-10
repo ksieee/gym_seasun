@@ -200,6 +200,7 @@ class NormalAttackEnv(gym.Env):
         self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
         self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'], hp['target_hp_max']]
         self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
+        self.rd_reward.data_source.data['x'] = range(len(reward))
         self.rd_reward.data_source.data['y'] = reward
         push_notebook()
 
