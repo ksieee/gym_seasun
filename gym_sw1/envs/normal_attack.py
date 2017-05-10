@@ -9,7 +9,6 @@ from bokeh.io import output_notebook, show, push_notebook
 from bokeh.plotting import figure
 from bokeh.layouts import gridplot
 
-
 STATE_DIM = 12
 ACTION_DIM = 9
 
@@ -23,7 +22,6 @@ MAX_ROUND_COUNT = 500
 
 
 class NormalAttackEnv(gym.Env):
-
     def init_params(self, game_ip, game_port):
         self.game_socket = GameSocket(game_ip, game_port)
 
@@ -45,7 +43,6 @@ class NormalAttackEnv(gym.Env):
         self.current_action = None
 
         self.reward_hist = []
-
 
     @classmethod
     def _trans_state(cls, state):
@@ -119,27 +116,28 @@ class NormalAttackEnv(gym.Env):
         self.round_count = 0
 
         # init bokeh visualize
-        #TODO: 如果可以的话, 把旧图去掉, 并在旧图上更新, 而不是产生新图
+        # TODO: 如果可以的话, 把旧图去掉, 并在旧图上更新, 而不是产生新图
         output_notebook()
         min_screen_x, min_screen_y, max_screen_x, max_screen_y, me_x, me_y, target_x, target_y = \
-        0, 0, 100, 100, 20, 20, 50, 60
-        plt_loc = figure(plot_width=400, plot_height=400, toolbar_location=None, 
-                         x_range=(min_screen_x, max_screen_x), y_range=(min_screen_y, max_screen_y), 
+            0, 0, 100, 100, 20, 20, 50, 60
+        plt_loc = figure(plot_width=400, plot_height=400, toolbar_location=None,
+                         x_range=(min_screen_x, max_screen_x), y_range=(min_screen_y, max_screen_y),
                          title="敌我坐标")
-        self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold", 
-                       fill_color=["green", "firebrick"], fill_alpha=0.6)
+        self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold",
+                                     fill_color=["green", "firebrick"], fill_alpha=0.6)
 
         me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 200, 180
         plt_hp = figure(plot_width=400, plot_height=400, title="hp血量")
         self.rd_hp = plt_hp.vbar(x=[1, 2, 1, 2], width=0.5, bottom=0,
-                    top=[me_hp, target_hp, me_hp_max, target_hp_max], color=["green", "pink",  "lightgreen", 'red'], alpha=0.6)
+                                 top=[me_hp, target_hp, me_hp_max, target_hp_max],
+                                 color=["green", "pink", "lightgreen", 'red'], alpha=0.6)
 
         plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
-        self.rd_action_direction = plt_action.rect([1,1,1,2, 2,3, 3, 3], [1,2,3, 1,3, 1,2,3], 0.9, 0.9,
-               fill_alpha=0.6, color="silver")
+        self.rd_action_direction = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3], [1, 2, 3, 1, 3, 1, 2, 3], 0.9, 0.9,
+                                                   fill_alpha=0.6, color="silver")
 
         self.rd_action_attack = plt_action.rect([5], [2], 0.9, 0.9,
-               fill_alpha=0.6, color="silver")
+                                                fill_alpha=0.6, color="silver")
 
         # 显示reward趋势
         plt_reward = figure(plot_width=400, plot_height=400, title="reward趋势")
@@ -229,7 +227,7 @@ class NormalAttackEnv(gym.Env):
         self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
         self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
         self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'], hp['target_hp_max']]
-        self.rd_action_direction.data_source.data['color'] = _transform_action_to_color(action)
+        self.rd_action_direction.data_source.data['color'] = self._transform_action_to_color(action)
         self.rd_action_attack.data_source.data['color'] = 'green' if action['normal_attack_target'] else 'silver'
         self.rd_reward.data_source.data['y'] = reward
         push_notebook()
@@ -239,14 +237,12 @@ class NormalAttackEnv(gym.Env):
     def _transform_action_to_color(action):
         # 按照绘图时格子的序列排列
         all_actions = ['move_down_left',
-                     'move_left',
-                    'move_left_up',
-                     'move_down',
-                    'move_up',  
-                     'move_right_down',
-                     'move_right',
-                     'move_up_right',
-                     ]
-        return ['green' if action[_a] else 'silver' for _a in all_actions] 
-
-
+                       'move_left',
+                       'move_left_up',
+                       'move_down',
+                       'move_up',
+                       'move_right_down',
+                       'move_right',
+                       'move_up_right',
+                       ]
+        return ['green' if action[_a] else 'silver' for _a in all_actions]
