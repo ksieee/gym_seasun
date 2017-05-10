@@ -44,6 +44,8 @@ class NormalAttackEnv(gym.Env):
 
         self.reward_hist = []
 
+        _init_learning_dashboard()
+
     @classmethod
     def _trans_state(cls, state):
         result = list()
@@ -114,46 +116,6 @@ class NormalAttackEnv(gym.Env):
 
         self.current_state = state
         self.round_count = 0
-
-        # init bokeh visualize
-        # TODO: 如果可以的话, 把旧图去掉, 并在旧图上更新, 而不是产生新图
-        output_notebook()
-        min_screen_x, min_screen_y, max_screen_x, max_screen_y, me_x, me_y, target_x, target_y = \
-            0, 0, 100, 100, 20, 20, 50, 60
-        plt_loc = figure(plot_width=400, plot_height=400, toolbar_location=None,
-                         x_range=(min_screen_x, max_screen_x), y_range=(min_screen_y, max_screen_y),
-                         title="敌我坐标")
-        self.plt_loc = plt_loc  # 用于后续更新边界
-        self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold",
-                                     fill_color=["green", "firebrick"], fill_alpha=0.6)
-
-        me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 200, 180
-        plt_hp = figure(plot_width=400, plot_height=400, title="hp血量")
-
-        plt_hp.xaxis.visible = False
-        plt_hp.xgrid.visible = False
-
-        self.rd_hp = plt_hp.vbar(x=[1, 1, 2, 2], width=0.5, bottom=0,
-                     top=[me_hp_max, me_hp, target_hp_max, target_hp], color=["grey", "darkgreen",  "grey", 'red'], alpha=0.6)
-
-        plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
-
-        plt_action.xaxis.visible = False
-        plt_action.xgrid.visible = False
-        plt_action.yaxis.visible = False
-        plt_action.ygrid.visible = False
-        self.rd_action = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3, 5], [1, 2, 3, 1, 3, 1, 2, 3, 2], 0.9, 0.9,
-                                                   fill_alpha=0.6, color=["silver"]*9, line_color='silver')
-        
-        # 显示reward趋势
-        plt_reward = figure(plot_width=400, plot_height=400, title="reward趋势")
-        self.rd_reward = plt_reward.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
-
-        # put all the plots in a gridplot
-        plt_combo = gridplot([[plt_loc, plt_hp], [plt_action, plt_reward]], toolbar_location=None)
-
-        # show the results
-        show(plt_combo, notebook_handle=True)
 
         return self._trans_state(state)
 
@@ -243,7 +205,46 @@ class NormalAttackEnv(gym.Env):
 
         return
 
-    def _transform_action_to_color(action):
+    def _init_learning_dashboard(self):
+        output_notebook()
+        min_screen_x, min_screen_y, max_screen_x, max_screen_y, me_x, me_y, target_x, target_y = \
+            0, 0, 100, 100, 20, 20, 50, 60
+        plt_loc = figure(plot_width=400, plot_height=400, toolbar_location=None,
+                         x_range=(min_screen_x, max_screen_x), y_range=(min_screen_y, max_screen_y),
+                         title="敌我坐标")
+        self.plt_loc = plt_loc  # 用于后续更新边界
+        self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold",
+                                     fill_color=["green", "firebrick"], fill_alpha=0.6)
+
+        me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 200, 180
+        plt_hp = figure(plot_width=400, plot_height=400, title="hp血量")
+
+        plt_hp.xaxis.visible = False
+        plt_hp.xgrid.visible = False
+
+        self.rd_hp = plt_hp.vbar(x=[1, 1, 2, 2], width=0.5, bottom=0,
+                     top=[me_hp_max, me_hp, target_hp_max, target_hp], color=["grey", "darkgreen",  "grey", 'red'], alpha=0.6)
+
+        plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
+
+        plt_action.xaxis.visible = False
+        plt_action.xgrid.visible = False
+        plt_action.yaxis.visible = False
+        plt_action.ygrid.visible = False
+        self.rd_action = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3, 5], [1, 2, 3, 1, 3, 1, 2, 3, 2], 0.9, 0.9,
+                                                   fill_alpha=0.6, color=["silver"]*9, line_color='silver')
+        
+        # 显示reward趋势
+        plt_reward = figure(plot_width=400, plot_height=400, title="reward趋势")
+        self.rd_reward = plt_reward.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+
+        # put all the plots in a gridplot
+        plt_combo = gridplot([[plt_loc, plt_hp], [plt_action, plt_reward]], toolbar_location=None)
+
+        # show the results
+        show(plt_combo, notebook_handle=True)
+
+    def _transform_action_to_color(self, action):
         # 按照绘图时格子的序列排列
         all_actions = ['move_down_left',
                        'move_left',
