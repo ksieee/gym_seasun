@@ -108,7 +108,7 @@ class NormalAttackEnv(gym.Env):
         reset_action = Action()
         reset_action.type = Action.RESET
 
-        state_raw = self.game_socket.send_action(reset_action)
+        state_raw = self.game_socket.send_action(reset_action.SerializeToString())
         state = State()
         state.ParseFromString(state_raw)
 
@@ -170,7 +170,7 @@ class NormalAttackEnv(gym.Env):
             step_action.type = Action.SKILL_TO_TARGET
             step_action.value = self.current_state.npc[0].id
 
-        state_raw = self.game_socket.send_action(step_action)
+        state_raw = self.game_socket.send_action(step_action.SerializeToString())
         state = State()
         state.ParseFromString(state_raw)
 
