@@ -131,10 +131,16 @@ class NormalAttackEnv(gym.Env):
 
         me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 200, 180
         plt_hp = figure(plot_width=400, plot_height=400, title="hp血量")
+        plt_hp.xaxis.visible = False
+        plt_hp.xgrid.visible = False
         self.rd_hp = plt_hp.vbar(x=[1, 1, 2, 2], width=0.5, bottom=0,
                      top=[me_hp_max, me_hp, target_hp_max, target_hp], color=["grey", "darkgreen",  "grey", 'red'], alpha=0.6)
 
         plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
+        plt_action.xaxis.visible = False
+        plt_action.xgrid.visible = False
+        plt_action.yaxis.visible = False
+        plt_action.ygrid.visible = False
         self.rd_action_direction = plt_action.rect([1,1,1,2, 2,3, 3, 3], [1,2,3, 1,3, 1,2,3], 0.9, 0.9,
                fill_alpha=0.6, color="silver")
 
