@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='gym_seasun',
-    version='0.0.1',
+    version='0.1.0',
     description='Gym Env for Seasun Games',
     url='https://github.com/ksieee/gym_seasun',
     author='Shane Li',
