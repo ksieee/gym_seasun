@@ -137,18 +137,13 @@ class NormalAttackEnv(gym.Env):
 
         plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
 
-        self.rd_action_direction = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3], [1, 2, 3, 1, 3, 1, 2, 3], 0.9, 0.9,
-                                                   fill_alpha=0.6, color=["silver"]*8, line_color='silver')
         plt_action.xaxis.visible = False
         plt_action.xgrid.visible = False
         plt_action.yaxis.visible = False
         plt_action.ygrid.visible = False
-        self.rd_action_direction = plt_action.rect([1,1,1,2, 2,3, 3, 3], [1,2,3, 1,3, 1,2,3], 0.9, 0.9,
-               fill_alpha=0.6, color="silver")
-
-        self.rd_action_attack = plt_action.rect([5], [2], 0.9, 0.9,
-                                                fill_alpha=0.6, color=["silver"], line_color='silver')
-
+        self.rd_action = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3, 5], [1, 2, 3, 1, 3, 1, 2, 3, 2], 0.9, 0.9,
+                                                   fill_alpha=0.6, color=["silver"]*9, line_color='silver')
+        
         # 显示reward趋势
         plt_reward = figure(plot_width=400, plot_height=400, title="reward趋势")
         self.rd_reward = plt_reward.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
@@ -237,8 +232,7 @@ class NormalAttackEnv(gym.Env):
         self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
         self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
         self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'], hp['target_hp_max']]
-        self.rd_action_direction.data_source.data['fill_color'] = self._transform_action_to_color(action)
-        self.rd_action_attack.data_source.data['fill_color'] = ['green' if action['normal_attack_target'] else 'silver']
+        self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
         self.rd_reward.data_source.data['y'] = reward
         push_notebook()
 
@@ -254,5 +248,6 @@ class NormalAttackEnv(gym.Env):
                        'move_right_down',
                        'move_right',
                        'move_up_right',
+                       'normal_attack_target'
                        ]
         return ['green' if action[_a] else 'silver' for _a in all_actions]
