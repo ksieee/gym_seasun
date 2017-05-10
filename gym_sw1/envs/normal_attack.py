@@ -128,9 +128,9 @@ class NormalAttackEnv(gym.Env):
 
         me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 200, 180
         plt_hp = figure(plot_width=400, plot_height=400, title="hp血量")
-        self.rd_hp = plt_hp.vbar(x=[1, 2, 1, 2], width=0.5, bottom=0,
-                                 top=[me_hp, target_hp, me_hp_max, target_hp_max],
-                                 color=["green", "pink", "lightgreen", 'red'], alpha=0.6)
+
+        self.rd_hp = plt_hp.vbar(x=[1, 1, 2, 2], width=0.5, bottom=0,
+                     top=[me_hp_max, me_hp, target_hp_max, target_hp], color=["grey", "darkgreen",  "grey", 'red'], alpha=0.6)
 
         plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
         self.rd_action_direction = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3], [1, 2, 3, 1, 3, 1, 2, 3], 0.9, 0.9,
@@ -147,7 +147,7 @@ class NormalAttackEnv(gym.Env):
         plt_combo = gridplot([[plt_loc, plt_hp], [plt_action, plt_reward]], toolbar_location=None)
 
         # show the results
-        show(plt_combo)
+        show(plt_combo, notebook_handle=True)
 
         return self._trans_state(state)
 
