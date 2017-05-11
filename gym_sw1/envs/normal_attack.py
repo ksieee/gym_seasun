@@ -44,7 +44,7 @@ class NormalAttackEnv(gym.Env):
 
         self.reward_hist = []
 
-        _init_learning_dashboard()
+        self._init_learning_dashboard()
 
     @classmethod
     def _trans_state(cls, state):
@@ -73,7 +73,7 @@ class NormalAttackEnv(gym.Env):
         return result
 
     def _cal_reward(self):
-        reward = 0;
+        reward = 0
 
         if not self.current_state.npc:
             reward = WIN_REWARD
@@ -192,10 +192,10 @@ class NormalAttackEnv(gym.Env):
         # reward = []
 
         # 更新图表
-        self.plt_loc.x_range.start = min_screen_x
-        self.plt_loc.x_range.end = max_screen_x
-        self.plt_loc.y_range.start = min_screen_y
-        self.plt_loc.y_range.end = max_screen_y
+        self.plt_loc.x_range.start = location["min_screen_x"]
+        self.plt_loc.x_range.end = location["max_screen_x"]
+        self.plt_loc.y_range.start = location["min_screen_y"]
+        self.plt_loc.y_range.end = location["max_screen_y"]
         self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
         self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
         self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'], hp['target_hp_max']]
@@ -224,7 +224,8 @@ class NormalAttackEnv(gym.Env):
         plt_hp.xgrid.visible = False
 
         self.rd_hp = plt_hp.vbar(x=[1, 1, 2, 2], width=0.5, bottom=0,
-                     top=[me_hp_max, me_hp, target_hp_max, target_hp], color=["grey", "darkgreen",  "grey", 'red'], alpha=0.6)
+                                 top=[me_hp_max, me_hp, target_hp_max, target_hp],
+                                 color=["grey", "darkgreen",  "grey", 'red'], alpha=0.6)
 
         plt_action = figure(plot_width=400, plot_height=400, title="action: 方向+攻击")
 
@@ -232,8 +233,9 @@ class NormalAttackEnv(gym.Env):
         plt_action.xgrid.visible = False
         plt_action.yaxis.visible = False
         plt_action.ygrid.visible = False
-        self.rd_action = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3, 5], [1, 2, 3, 1, 3, 1, 2, 3, 2], 0.9, 0.9,
-                                                   fill_alpha=0.6, color=["silver"]*9, line_color='silver')
+        self.rd_action = plt_action.rect([1, 1, 1, 2, 2, 3, 3, 3, 5], [1, 2, 3, 1, 3, 1, 2, 3, 2],
+                                         0.9, 0.9, fill_alpha=0.6,
+                                         color=["silver"]*9, line_color='silver')
         
         # 显示reward趋势
         plt_reward = figure(plot_width=400, plot_height=400, title="reward趋势")
