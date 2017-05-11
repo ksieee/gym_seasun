@@ -10,5 +10,5 @@ setup(
     license='Apache License Version 2.0',
     packages=find_packages(),
     zip_safe=False,
-    install_requires=['gym>=0.8.0'],
+    install_requires=['gym>=0.8.0', 'bokeh>=0.12'],
 )
