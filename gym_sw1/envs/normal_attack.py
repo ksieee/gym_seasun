@@ -44,7 +44,7 @@ class NormalAttackEnv(gym.Env):
 
         self.reward_hist = []
 
-        self._init_learning_dashboard()
+        self.learning_dashboard = NormalAttackDashboard()
 
     @classmethod
     def _trans_state(cls, state):
@@ -190,23 +190,15 @@ class NormalAttackEnv(gym.Env):
         # hp = {me_hp, me_hp_max, target_hp, target_hp_max}
         # action = {move_up, move_up_right, move_right, move_right_down, move_down, move_down_left, move_left, move_left_up, normal_attack_target}
         # reward = []
-
-        # 更新图表
-        self.plt_loc.x_range.start = location["min_screen_x"]
-        self.plt_loc.x_range.end = location["max_screen_x"]
-        self.plt_loc.y_range.start = location["min_screen_y"]
-        self.plt_loc.y_range.end = location["max_screen_y"]
-        self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
-        self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
-        self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'], hp['target_hp_max']]
-        self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
-        self.rd_reward.data_source.data['x'] = range(len(reward))
-        self.rd_reward.data_source.data['y'] = reward
-        push_notebook()
-
+        env_data = [location, hp, action, reward]
+        self.learning_dashboard.update_plots(env_data)
         return
 
-    def _init_learning_dashboard(self):
+
+class NormalAttackDashboard:
+    """A dashboard to visualize RL learning performance on normal attack"""
+
+    def __init__(self):
         output_notebook()
         min_screen_x, min_screen_y, max_screen_x, max_screen_y, me_x, me_y, target_x, target_y = \
             0, 0, 100, 100, 20, 20, 50, 60
@@ -246,6 +238,23 @@ class NormalAttackEnv(gym.Env):
 
         # show the results
         show(plt_combo, notebook_handle=True)
+
+    def update_plots(self, env_state_action):
+        """update bokeh plots according to new env state and action data"""
+        location, hp, action, reward = env_state_action
+
+        self.plt_loc.x_range.start = location["min_screen_x"]
+        self.plt_loc.x_range.end = location["max_screen_x"]
+        self.plt_loc.y_range.start = location["min_screen_y"]
+        self.plt_loc.y_range.end = location["max_screen_y"]
+        self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
+        self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
+        self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'],
+                                              hp['target_hp_max']]
+        self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
+        self.rd_reward.data_source.data['x'] = range(len(reward))
+        self.rd_reward.data_source.data['y'] = reward
+        push_notebook()
 
     def _transform_action_to_color(self, action):
         # 按照绘图时格子的序列排列
