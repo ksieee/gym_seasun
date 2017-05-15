@@ -164,14 +164,14 @@ class NormalAttackEnv(gym.Env):
                   'target_hp_max': self.current_state.npc[0].hp_m}
 
             if self.current_action.type == Action.MOVE:
-                action = {'move_up': bool(self.current_action.value.index(0)),
-                          'move_up_right': bool(self.current_action.value.index(1)),
-                          'move_right': bool(self.current_action.value.index(2)),
-                          'move_right_down': bool(self.current_action.value.index(3)),
-                          'move_down': bool(self.current_action.value.index(4)),
-                          'move_down_left': bool(self.current_action.value.index(5)),
-                          'move_left': bool(self.current_action.value.index(6)),
-                          'move_left_up': bool(self.current_action.value.index(7)),
+                action = {'move_up': bool(self.current_action.value[0] == 0),
+                          'move_up_right': bool(self.current_action.value[0] == 1),
+                          'move_right': bool(self.current_action.value[0] == 2),
+                          'move_right_down': bool(self.current_action.value[0] == 3),
+                          'move_down': bool(self.current_action.value[0] == 4),
+                          'move_down_left': bool(self.current_action.value[0] == 5),
+                          'move_left': bool(self.current_action.value[0] == 6),
+                          'move_left_up': bool(self.current_action.value[0] == 7),
                           'normal_attack_target': False}
             if self.current_action.type == Action.SKILL_TO_TARGET:
                 action = {'move_up': False,
