@@ -1,4 +1,5 @@
 import gym
+import gym.spaces
 import numpy as np
 
 from gym_sw1.trans.game_socket import GameSocket
@@ -79,10 +80,10 @@ class NormalAttackEnv(gym.Env):
             reward = LOSE_REWARD
 
         else:
-            current_dist_power = np.square(self.current_state.player.base.x - self.current_state.npc.x) \
-                                 + np.square(self.current_state.player.base.y - self.current_state.npc.y)
-            last_dist_power = np.square(self.last_state.player.base.x - self.last_state.npc.x) \
-                              + np.square(self.last_state.player.base.y - self.last_state.npc.y)
+            current_dist_power = np.square(self.current_state.player.base.x - self.current_state.npc[0].x) \
+                                 + np.square(self.current_state.player.base.y - self.current_state.npc[0].y)
+            last_dist_power = np.square(self.last_state.player.base.x - self.last_state.npc[0].x) \
+                              + np.square(self.last_state.player.base.y - self.last_state.npc[0].y)
             dist_reward = np.sqrt(last_dist_power) - np.sqrt(current_dist_power)
             me_hp_reward = self.current_state.player.base.hp - self.last_state.player.base.hp
             target_hp_reward = self.last_state.npc[0].hp - self.current_state.npc[0].hp
@@ -92,7 +93,7 @@ class NormalAttackEnv(gym.Env):
         return reward
 
     def _cal_done(self, state):
-        if state.player and (not state.player.hp):
+        if state.player and state.player.base and (not state.player.base.hp):
             return True
 
         if not state.npc:
@@ -128,7 +129,7 @@ class NormalAttackEnv(gym.Env):
             step_action.value.extend([int_action])
         else:
             step_action.type = Action.SKILL_TO_TARGET
-            step_action.value = self.current_state.npc[0].id
+            step_action.value.extend([self.current_state.npc[0].id])
 
         state_raw = self.game_socket.send_action(step_action.SerializeToString())
         state = State()
@@ -139,9 +140,12 @@ class NormalAttackEnv(gym.Env):
         self.current_action = step_action
         self.round_count += 1
 
-        return self._trans_state(state), self._cal_reward(state), self._cal_done(state)
+        return self._trans_state(state), self._cal_reward(), self._cal_done(state), None
 
     def _render(self, mode='human', close=False):
+        if (not self.current_action) or (not self.current_state):
+            return
+
         if self.current_state.screen and self.current_state.player and self.current_state.npc:
             location = {'min_screen_x': self.current_state.screen.min_screen_x,
                         'min_screen_y': self.current_state.screen.min_screen_y,
