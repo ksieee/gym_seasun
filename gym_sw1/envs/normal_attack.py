@@ -20,6 +20,8 @@ MAX_ROUND_COUNT = 500
 
 
 class NormalAttackEnv(gym.Env):
+    metadata = {'render.modes': ['human', 'rgb_array']}
+
     def init_params(self, game_ip, game_port):
         self.game_socket = GameSocket(game_ip, game_port)
 
