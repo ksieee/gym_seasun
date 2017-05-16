@@ -124,6 +124,7 @@ class NormalAttackEnv(gym.Env):
 
         self.current_state = state
         self.round_count = 0
+        self.reward_hist = []
 
         return self._trans_state(state)
 
