@@ -31,7 +31,7 @@ class NormalAttackDashboard:
         self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold",
                                      fill_color=["green", "firebrick"], fill_alpha=0.6)
 
-        me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 200, 180
+        me_hp, me_hp_max, target_hp, target_hp_max = 100, 120, 180, 200
         plt_hp = figure(plot_width=400, plot_height=400, title="hp血量")
 
         plt_hp.xaxis.visible = False
@@ -76,8 +76,8 @@ class NormalAttackDashboard:
         self.plt_loc.y_range.end = location["max_screen_y"]
         self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
         self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
-        self.rd_hp.data_source.data['top'] = [hp['me_hp'], hp['target_hp'], hp['me_hp_max'],
-                                              hp['target_hp_max']]
+        self.rd_hp.data_source.data['top'] = [hp['me_hp_max'], hp['me_hp'],
+                                              hp['target_hp_max'], hp['target_hp'], ]
         self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
         self.rd_reward.data_source.data['x'] = range(len(reward))
         self.rd_reward.data_source.data['y'] = reward
