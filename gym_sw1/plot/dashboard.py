@@ -20,8 +20,8 @@ class NormalAttackDashboard:
         min_screen_x, min_screen_y, max_screen_x, max_screen_y, me_x, me_y, target_x, target_y = \
             0, 0, 100, 100, 20, 20, 50, 60
         plt_loc = figure(plot_width=400, plot_height=400, toolbar_location=None,
-                         x_range=(min_screen_x, max_screen_x), y_range=(min_screen_y, max_screen_y),
-                         title="敌我距离")
+                         x_range=(min_screen_x, max_screen_x), y_range=(max_screen_y, min_screen_y),
+                         x_axis_location="above", title="敌我距离")  # use up-left corner as origin
         plt_loc.title.align = "center"
         plt_loc.title.text_color = "orange"
         plt_loc.title.text_font_size = "25px"
@@ -72,8 +72,8 @@ class NormalAttackDashboard:
         self.plt_loc.title.text = "敌我距离: {:12.2f}".format(eucl_dist)
         self.plt_loc.x_range.start = location["min_screen_x"]
         self.plt_loc.x_range.end = location["max_screen_x"]
-        self.plt_loc.y_range.start = location["min_screen_y"]
-        self.plt_loc.y_range.end = location["max_screen_y"]
+        self.plt_loc.y_range.start = location["max_screen_y"]
+        self.plt_loc.y_range.end = location["min_screen_y"]
         self.rd_loc.data_source.data['x'] = [location['me_x'], location['target_x']]
         self.rd_loc.data_source.data['y'] = [location['me_y'], location['target_y']]
         self.rd_hp.data_source.data['top'] = [hp['me_hp_max'], hp['me_hp'],
