@@ -69,7 +69,7 @@ class NormalAttackDashboard:
         _coords1 = np.array([location['me_x'], location['me_y']])
         _coords2 = np.array([location['target_x'], location['target_y']])
         eucl_dist = np.sqrt(np.sum((_coords1 - _coords2) ** 2))  # alternative way: np.linalg.norm(_coords1 - _coords2)
-        self.plt_loc.title.text = f"敌我距离: {eucl_dist:12.3}"
+        self.plt_loc.title.text = "敌我距离: {:12.2f}".format(eucl_dist)
         self.plt_loc.x_range.start = location["min_screen_x"]
         self.plt_loc.x_range.end = location["max_screen_x"]
         self.plt_loc.y_range.start = location["min_screen_y"]
