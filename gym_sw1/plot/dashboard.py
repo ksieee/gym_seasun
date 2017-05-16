@@ -2,6 +2,7 @@
 from bokeh.io import output_notebook, show, push_notebook
 from bokeh.plotting import figure
 from bokeh.layouts import gridplot
+import numpy as np
 
 # ! only used to temporarily shutdown bokeh warning !
 import warnings
@@ -20,7 +21,12 @@ class NormalAttackDashboard:
             0, 0, 100, 100, 20, 20, 50, 60
         plt_loc = figure(plot_width=400, plot_height=400, toolbar_location=None,
                          x_range=(min_screen_x, max_screen_x), y_range=(min_screen_y, max_screen_y),
-                         title="敌我坐标")
+                         title="敌我距离")
+        plt_loc.title.align = "center"
+        plt_loc.title.text_color = "orange"
+        plt_loc.title.text_font_size = "25px"
+        plt_loc.title.background_fill_color = "blue"
+
         self.plt_loc = plt_loc  # 用于后续更新边界
         self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold",
                                      fill_color=["green", "firebrick"], fill_alpha=0.6)
@@ -59,6 +65,11 @@ class NormalAttackDashboard:
         """update bokeh plots according to new env state and action data"""
         location, hp, action, reward = env_state_action
 
+        # calc Euclidean Distance
+        _coords1 = np.array([location['me_x'], location['me_y']])
+        _coords2 = np.array([location['target_x'], location['target_y']])
+        eucl_dist = np.sqrt(np.sum((_coords1 - _coords2) ** 2))  # alternative way: np.linalg.norm(_coords1 - _coords2)
+        self.plt_loc.title.text = f"敌我距离: {eucl_dist:12.3}"
         self.plt_loc.x_range.start = location["min_screen_x"]
         self.plt_loc.x_range.end = location["max_screen_x"]
         self.plt_loc.y_range.start = location["min_screen_y"]
