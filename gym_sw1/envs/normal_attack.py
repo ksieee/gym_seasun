@@ -139,7 +139,7 @@ class NormalAttackEnv(gym.Env):
             step_action.value.extend([int_action])
         else:
             step_action.type = Action.SKILL_TO_TARGET
-            step_action.value.extend([self.current_state.npc[0].id])
+            step_action.value.extend([self.current_state.player.skills[0].id, self.current_state.npc[0].id])
 
         state_raw = self.game_socket.send_action(step_action.SerializeToString())
         state = State()
