@@ -3,6 +3,13 @@ from bokeh.io import output_notebook, show, push_notebook
 from bokeh.plotting import figure
 from bokeh.layouts import gridplot
 
+# ! only used to temporarily shutdown bokeh warning !
+import warnings
+warnings.filterwarnings('ignore')
+# TODO: solve warning below
+# \site-packages\bokeh\models\sources.py:89: BokehUserWarning: ColumnDataSource's columns must be of the same length
+#  lambda: warnings.warn("ColumnDataSource's columns must be of the same length", BokehUserWarning))
+
 
 class NormalAttackDashboard:
     """A dashboard to visualize RL learning performance on normal attack"""
