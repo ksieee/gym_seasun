@@ -2,10 +2,10 @@ import gym
 import gym.spaces
 import numpy as np
 
+from gym_sw1.plot.dashboard import NormalAttackDashboard
 from gym_sw1.trans.game_socket import GameSocket
 from gym_sw1.trans.pb.action_pb2 import Action
 from gym_sw1.trans.pb.state_pb2 import State
-from .dashboard import NormalAttackDashboard
 
 STATE_DIM = 12
 ACTION_DIM = 9
@@ -184,7 +184,7 @@ class NormalAttackEnv(gym.Env):
                           'move_left_up': False,
                           'normal_attack_target': True}
 
-        self._render_state_action(location, hp, action, self.reward_hist[-50:])
+        self._render_state_action(location, hp, action, self.reward_hist)
 
         return
 
