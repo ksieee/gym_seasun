@@ -197,11 +197,11 @@ class NormalAttackEnv(gym.Env):
 
         return
 
-    def _render_state_action(self, location, hp, action, reward):
+    def _render_state_action(self, location, hp, action, reward, episode_count):
         # location = {min_screen_x, min_screen_y, max_screen_x, max_screen_y, me_x, me_y, target_x, target_y}
         # hp = {me_hp, me_hp_max, target_hp, target_hp_max}
         # action = {move_up, move_up_right, move_right, move_right_down, move_down, move_down_left, move_left, move_left_up, normal_attack_target}
         # reward = []
-        env_data = [location, hp, action, reward]
+        env_data = [location, hp, action, reward, episode_count]
         self.learning_dashboard.update_plots(env_data)
         return

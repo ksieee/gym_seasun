@@ -55,7 +55,7 @@ class NormalAttackDashboard:
         plt_reward = figure(plot_width=400, plot_height=400, title="last reward: ")
         plt_reward.title.align = "center"
         plt_reward.title.text_color = "green"
-        plt_reward.title.text_font_size = "25px"
+        plt_reward.title.text_font_size = "20px"
         plt_reward.title.background_fill_color = "black"
         self.plt_reward = plt_reward  # 用于后续更新标题中的reward值
         self.rd_reward = plt_reward.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
@@ -68,7 +68,7 @@ class NormalAttackDashboard:
 
     def update_plots(self, env_state_action):
         """update bokeh plots according to new env state and action data"""
-        location, hp, action, reward = env_state_action
+        location, hp, action, reward, episode_count = env_state_action
 
         # calc Euclidean Distance
         _coords1 = np.array([location['me_x'], location['me_y']])
@@ -86,7 +86,7 @@ class NormalAttackDashboard:
         self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
         self.rd_reward.data_source.data['x'] = range(len(reward))
         self.rd_reward.data_source.data['y'] = reward
-        self.plt_reward.title.text = "last reward: {:5}".format(reward[-1] if reward else "")
+        self.plt_reward.title.text = "#{} episode -- reward: {:5}".format(episode_count, reward[-1] if reward else "")
         push_notebook()
 
     def _transform_action_to_color(self, action):
