@@ -183,8 +183,7 @@ class NormalAttackEnv(gym.Env):
                           'move_left': False,
                           'move_left_up': False,
                           'normal_attack_target': True}
-
-        self._render_state_action(location, hp, action, self.reward_hist)
+            self._render_state_action(location, hp, action, self.reward_hist)
 
         return
 
