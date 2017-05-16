@@ -16,7 +16,7 @@ DIST_REWARD_WEIGHT = 1
 TARGET_HP_REWARD_WEIGHT = 100
 ME_HP_REWARD_WEIGHT = 100
 MAX_DIST = 900
-MAX_ROUND_COUNT = 500
+MAX_ROUND_COUNT = 50
 
 
 class NormalAttackEnv(gym.Env):
@@ -92,6 +92,7 @@ class NormalAttackEnv(gym.Env):
             me_hp_reward = self.current_state.player.base.hp - self.last_state.player.base.hp
             target_hp_reward = self.last_state.npc[0].hp - self.current_state.npc[0].hp
             reward = dist_reward * DIST_REWARD_WEIGHT + me_hp_reward * ME_HP_REWARD_WEIGHT + target_hp_reward * TARGET_HP_REWARD_WEIGHT - self.round_count
+            #reward = -np.sqrt(current_dist_power) / 100.
 
         self.reward_hist.append(reward)
         return reward
