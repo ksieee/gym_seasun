@@ -37,6 +37,7 @@ class NormalAttackEnv(gym.Env):
         # move_down_left, move_left, move_left_up, normal_attack_target}
         self.action_space = gym.spaces.Discrete(ACTION_DIM)
 
+        self.episode_count = 0
         self.round_count = 0
         self.last_state = None
         self.current_state = None
@@ -92,7 +93,6 @@ class NormalAttackEnv(gym.Env):
             me_hp_reward = self.current_state.player.base.hp - self.last_state.player.base.hp
             target_hp_reward = self.last_state.npc[0].hp - self.current_state.npc[0].hp
             reward = dist_reward * DIST_REWARD_WEIGHT + me_hp_reward * ME_HP_REWARD_WEIGHT + target_hp_reward * TARGET_HP_REWARD_WEIGHT - self.round_count
-            #reward = -np.sqrt(current_dist_power) / 100.
 
         self.reward_hist.append(reward)
         return reward
@@ -124,6 +124,7 @@ class NormalAttackEnv(gym.Env):
 
         self.current_state = state
         self.round_count = 0
+        self.episode_count += 1
         self.reward_hist = []
 
         return self._trans_state(state)
@@ -192,7 +193,7 @@ class NormalAttackEnv(gym.Env):
                           'move_left': False,
                           'move_left_up': False,
                           'normal_attack_target': True}
-            self._render_state_action(location, hp, action, self.reward_hist)
+            self._render_state_action(location, hp, action, self.reward_hist, self.episode_count)
 
         return
 
