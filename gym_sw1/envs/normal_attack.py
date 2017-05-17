@@ -88,10 +88,10 @@ class NormalAttackEnv(gym.Env):
 
             last_dist_power = np.square(self.last_state.player.base.x - self.last_state.npc[0].x) \
                               + np.square(self.last_state.player.base.y - self.last_state.npc[0].y)
-
             dist_reward = np.sqrt(last_dist_power) - np.sqrt(current_dist_power)
             me_hp_reward = self.current_state.player.base.hp - self.last_state.player.base.hp
             target_hp_reward = self.last_state.npc[0].hp - self.current_state.npc[0].hp
+
             reward = dist_reward * DIST_REWARD_WEIGHT + me_hp_reward * ME_HP_REWARD_WEIGHT + target_hp_reward * TARGET_HP_REWARD_WEIGHT - self.round_count
 
         self.reward_hist.append(reward)
