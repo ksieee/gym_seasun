@@ -27,7 +27,7 @@ class NormalAttackDashboard:
         plt_loc.title.text_font_size = "25px"
         plt_loc.title.background_fill_color = "blue"
 
-        self.plt_loc = plt_loc  # 用于后续更新边界
+        self.plt_loc = plt_loc  # 用于后续更新边界和标题中的距离显示
         self.rd_loc = plt_loc.circle([me_x, target_x], [me_y, target_y], size=20, line_color="gold",
                                      fill_color=["green", "firebrick"], fill_alpha=0.6)
 
@@ -52,7 +52,12 @@ class NormalAttackDashboard:
                                          color=["silver"] * 9, line_color='silver')
 
         # 显示reward趋势
-        plt_reward = figure(plot_width=400, plot_height=400, title="reward趋势")
+        plt_reward = figure(plot_width=400, plot_height=400, title="last reward: ")
+        plt_reward.title.align = "center"
+        plt_reward.title.text_color = "green"
+        plt_reward.title.text_font_size = "20px"
+        plt_reward.title.background_fill_color = "black"
+        self.plt_reward = plt_reward  # 用于后续更新标题中的reward值
         self.rd_reward = plt_reward.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
 
         # put all the plots in a gridplot
@@ -63,7 +68,7 @@ class NormalAttackDashboard:
 
     def update_plots(self, env_state_action):
         """update bokeh plots according to new env state and action data"""
-        location, hp, action, reward = env_state_action
+        location, hp, action, reward, episode_count = env_state_action
 
         # calc Euclidean Distance
         _coords1 = np.array([location['me_x'], location['me_y']])
@@ -81,6 +86,8 @@ class NormalAttackDashboard:
         self.rd_action.data_source.data['fill_color'] = self._transform_action_to_color(action)
         self.rd_reward.data_source.data['x'] = range(len(reward))
         self.rd_reward.data_source.data['y'] = reward
+        self.plt_reward.title.text = "episode #{} / step #{} / reward: {:5.1f}".format(
+            episode_count, len(reward), reward[-1] if reward else "")
         push_notebook()
 
     def _transform_action_to_color(self, action):
