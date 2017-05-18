@@ -87,7 +87,7 @@ class NormalAttackDashboard:
         self.rd_reward.data_source.data['x'] = range(len(reward))
         self.rd_reward.data_source.data['y'] = reward
         self.plt_reward.title.text = "episode #{} / step #{} / reward: {:5.1f}".format(
-            episode_count, len(reward), reward[-1] if reward else "")
+            episode_count, len(reward), reward[-1] if reward else 0)
         push_notebook()
 
     def _transform_action_to_color(self, action):
