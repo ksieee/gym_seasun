@@ -49,7 +49,7 @@ class NormalAttackEnv(gym.Env):
         self.learning_dashboard = NormalAttackDashboard()
 
     @classmethod
-    def _trans_state(cls, state):
+    def _trans_state(self, state):
         result = list()
 
         if state.player:
@@ -57,7 +57,7 @@ class NormalAttackEnv(gym.Env):
             result.append(state.player.base.y)
             result.append(state.player.base.hp)
             result.append(state.player.base.hp_m)
-            result.append(state.player.base.face_to)
+            result.append(self._cal_face_to(state.player.base.face_to))
             result.append(state.player.base.move_speed)
         else:
             result.extend([0, 0, 0, 0, 0, 0])
@@ -67,12 +67,15 @@ class NormalAttackEnv(gym.Env):
             result.append(state.npc[0].y)
             result.append(state.npc[0].hp)
             result.append(state.npc[0].hp_m)
-            result.append(state.npc[0].face_to)
+            result.append(self._cal_face_to(state.npc[0].face_to))
             result.append(state.npc[0].move_speed)
         else:
             result.extend([0, 0, 0, 0, 0, 0])
 
         return result
+
+    def _cal_face_to(self, orginal):
+        return int((orginal + 1.0) / 8)
 
     def _cal_reward(self):
         reward = 0
