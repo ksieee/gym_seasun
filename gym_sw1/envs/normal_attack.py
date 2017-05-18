@@ -57,7 +57,7 @@ class NormalAttackEnv(gym.Env):
             result.append(state.player.base.y)
             result.append(state.player.base.hp)
             result.append(state.player.base.hp_m)
-            result.append(self._cal_face_to(state.player.base.face_to))
+            result.append(self._cal_face_to(self, state.player.base.face_to))
             result.append(state.player.base.move_speed)
         else:
             result.extend([0, 0, 0, 0, 0, 0])
@@ -67,15 +67,12 @@ class NormalAttackEnv(gym.Env):
             result.append(state.npc[0].y)
             result.append(state.npc[0].hp)
             result.append(state.npc[0].hp_m)
-            result.append(self._cal_face_to(state.npc[0].face_to))
+            result.append(self._cal_face_to(self, state.npc[0].face_to))
             result.append(state.npc[0].move_speed)
         else:
             result.extend([0, 0, 0, 0, 0, 0])
 
         return result
-
-    def _cal_face_to(self, orginal):
-        return int((orginal + 1.0) / 8)
 
     def _cal_reward(self):
         reward = 0
@@ -100,6 +97,9 @@ class NormalAttackEnv(gym.Env):
 
         self.reward_hist.append(reward)
         return reward
+
+    def _cal_face_to(self, orginal):
+        return int((orginal + 1.0) / 8)
 
     def _cal_dist(self):
         current_dist_power = np.square(self.current_state.player.base.x - self.current_state.npc[0].x) \
