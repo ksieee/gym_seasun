@@ -72,7 +72,7 @@ class NormalAttackEnv(gym.Env):
         else:
             result.extend([0, 0, 0, 0, 0, 0])
 
-        return result
+        return np.array(result)
 
     def _cal_reward(self):
         reward = 0
