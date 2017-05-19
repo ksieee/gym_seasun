@@ -7,7 +7,7 @@ from gym_sw1.trans.game_socket import GameSocket
 from gym_sw1.trans.pb.action_pb2 import Action
 from gym_sw1.trans.pb.state_pb2 import State
 
-STATE_DIM = 12
+STATE_DIM = 6
 ACTION_DIM = 9
 
 WIN_REWARD = 300
@@ -52,27 +52,40 @@ class NormalAttackEnv(gym.Env):
     def _trans_state(self, state):
         result = list()
 
-        if state.player:
-            result.append(state.player.base.x)
-            result.append(state.player.base.y)
+        # if state.player:
+        #     result.append(state.player.base.x)
+        #     result.append(state.player.base.y)
+        #     result.append(state.player.base.hp)
+        #     result.append(state.player.base.hp_m)
+        #     result.append(self._cal_face_to(self, state.player.base.face_to))
+        #     result.append(state.player.base.move_speed)
+        # else:
+        #     result.extend([0, 0, 0, 0, 0, 0])
+        #
+        # if state.npc:
+        #     result.append(state.npc[0].x)
+        #     result.append(state.npc[0].y)
+        #     result.append(state.npc[0].hp)
+        #     result.append(state.npc[0].hp_m)
+        #     result.append(self._cal_face_to(self, state.npc[0].face_to))
+        #     result.append(state.npc[0].move_speed)
+        # else:
+        #     result.extend([0, 0, 0, 0, 0, 0])
+
+        if state.player and state.npc:
+            result.append(state.player.base.x - state.npc[0].x)
+            result.append(state.player.base.y - state.npc[0].y)
             result.append(state.player.base.hp)
             result.append(state.player.base.hp_m)
-            result.append(self._cal_face_to(self, state.player.base.face_to))
-            result.append(state.player.base.move_speed)
-        else:
-            result.extend([0, 0, 0, 0, 0, 0])
-
-        if state.npc:
-            result.append(state.npc[0].x)
-            result.append(state.npc[0].y)
             result.append(state.npc[0].hp)
             result.append(state.npc[0].hp_m)
-            result.append(self._cal_face_to(self, state.npc[0].face_to))
-            result.append(state.npc[0].move_speed)
         else:
             result.extend([0, 0, 0, 0, 0, 0])
 
         return np.array(result)
+
+    def _cal_face_to(self, orginal):
+        return int((orginal + 1.0) / 8)
 
     def _cal_reward(self):
         reward = 0
@@ -80,8 +93,6 @@ class NormalAttackEnv(gym.Env):
         if not self.current_state.npc:
             reward = WIN_REWARD
         elif not self.current_state.player.base.hp:
-            reward = LOSE_REWARD
-        elif self._cal_dist() > MAX_DIST:
             reward = LOSE_REWARD
         else:
             current_dist_power = np.square(self.current_state.player.base.x - self.current_state.npc[0].x) \
@@ -93,13 +104,11 @@ class NormalAttackEnv(gym.Env):
             me_hp_reward = self.current_state.player.base.hp - self.last_state.player.base.hp
             target_hp_reward = self.last_state.npc[0].hp - self.current_state.npc[0].hp
 
-            reward = dist_reward * DIST_REWARD_WEIGHT + me_hp_reward * ME_HP_REWARD_WEIGHT + target_hp_reward * TARGET_HP_REWARD_WEIGHT - self.round_count * ROUND_REWARD_WEIGHT
+            reward = -np.sqrt(
+                current_dist_power) + me_hp_reward * ME_HP_REWARD_WEIGHT + target_hp_reward * TARGET_HP_REWARD_WEIGHT
 
         self.reward_hist.append(reward)
         return reward
-
-    def _cal_face_to(self, orginal):
-        return int((orginal + 1.0) / 8)
 
     def _cal_dist(self):
         current_dist_power = np.square(self.current_state.player.base.x - self.current_state.npc[0].x) \
