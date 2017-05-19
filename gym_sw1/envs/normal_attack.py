@@ -38,6 +38,7 @@ class NormalAttackEnv(gym.Env):
         # move_down_left, move_left, move_left_up, normal_attack_target}
         self.action_space = gym.spaces.Discrete(ACTION_DIM)
 
+
         self.episode_count = 0
         self.round_count = 0
         self.last_state = None
